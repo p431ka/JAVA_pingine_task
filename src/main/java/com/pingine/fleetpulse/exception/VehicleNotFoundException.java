@@ -1,4 +1,4 @@
-package com.pingine.fleetpulse.service;
+package com.pingine.fleetpulse.exception;
 
 public class VehicleNotFoundException extends RuntimeException {
 

@@ -3,6 +3,7 @@ package com.pingine.fleetpulse.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pingine.fleetpulse.api.dto.VehicleResponse;
+import com.pingine.fleetpulse.exception.VehicleNotFoundException;
 import com.pingine.fleetpulse.integration.VehicleEnrichment;
 import com.pingine.fleetpulse.integration.VehicleRegistryClient;
 import com.pingine.fleetpulse.persistence.postgres.VehicleEntity;
