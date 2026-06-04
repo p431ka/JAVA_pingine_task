@@ -5,6 +5,7 @@ import feign.RetryableException;
 import feign.codec.ErrorDecoder;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class VehicleRegistryFeignConfig {
@@ -23,7 +24,7 @@ public class VehicleRegistryFeignConfig {
                         response.status(),
                         "Registry server error " + response.status(),
                         response.request().httpMethod(),
-                        (Long) null,
+                        (Date) null,
                         response.request());
             }
             return defaultDecoder.decode(methodKey, response);
