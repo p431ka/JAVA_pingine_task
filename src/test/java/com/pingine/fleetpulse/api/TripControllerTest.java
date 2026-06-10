@@ -22,8 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(TripController.class)
 class TripControllerTest {
 
-    private static final String VEHICLE_ID = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
-    private static final String LAST_TRIP_URL = "/api/v1/vehicles/{vehicleId}/last-trip";
+    private final String VEHICLE_ID = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
+    private final String LAST_TRIP_URL = "/api/v1/vehicles/{vehicleId}/last-trip";
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,7 +35,7 @@ class TripControllerTest {
     void returnsLastTripForExistingVehicle() throws Exception {
         when(tripService.getLastTrip(VEHICLE_ID)).thenReturn(lastTripResponse());
 
-        mockMvc.perform(get(LAST_TRIP_URL, VEHICLE_ID))//билдим мок для get
+        mockMvc.perform(get(LAST_TRIP_URL, VEHICLE_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.vehicle.id").value(VEHICLE_ID))
                 .andExpect(jsonPath("$.vehicle.licensePlate").value("B-PG-1001"))
@@ -55,18 +55,18 @@ class TripControllerTest {
     }
 
     @Test
-    void returns404WhenLastTripDoesNotExist() throws Exception {
+    void returns404WhenVehicleDoesNotExist() throws Exception {
         String vehicleId = "unknown";
 
         when(tripService.getLastTrip(vehicleId))
                 .thenThrow(new VehicleNotFoundException(vehicleId));
 
-        mockMvc.perform(get(LAST_TRIP_URL, vehicleId))//билдим мок для get
+        mockMvc.perform(get(LAST_TRIP_URL, vehicleId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("Vehicle not found: " + vehicleId));
     }
 
-    private static TripResponse lastTripResponse() {//вспомогательный метод для поездки
+    private TripResponse lastTripResponse() {
         return TripResponse.builder()
                 .vehicle(vehicleResponse())
                 .startedAt(Instant.parse("2026-04-27T10:00:00Z"))
@@ -82,7 +82,7 @@ class TripControllerTest {
                 .build();
     }
 
-    private static VehicleResponse vehicleResponse() {//вспомогательный метод для машины
+    private VehicleResponse vehicleResponse() {
         return VehicleResponse.builder()
                 .id(VEHICLE_ID)
                 .licensePlate("B-PG-1001")
@@ -92,7 +92,7 @@ class TripControllerTest {
                 .build();
     }
 
-    private static TripResponse.PointDto point(String ts, double lat, double lon, double speedKph) {//вспомогательный метод для точки
+    private TripResponse.PointDto point(String ts, double lat, double lon, double speedKph) {
         return TripResponse.PointDto.builder()
                 .ts(Instant.parse(ts))
                 .lat(lat)

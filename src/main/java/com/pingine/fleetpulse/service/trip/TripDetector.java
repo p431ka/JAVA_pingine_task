@@ -9,6 +9,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TripDetector {
@@ -28,7 +29,7 @@ public class TripDetector {
     private List<TelemetryPoint> preparePoints(List<TelemetryPoint> points) {
         List<TelemetryPoint> sortedPoints = points.stream()
                 .sorted(Comparator.comparing(TelemetryPoint::getTs))
-                .toList();
+                .collect(Collectors.toList());
 
         return removeDuplicate(sortedPoints);
     }
@@ -84,7 +85,7 @@ public class TripDetector {
 
         List<Trip.TripPoint> tripPoints = points.stream()
                 .map(this::toTripPoint)
-                .toList();
+                .collect(Collectors.toList());
 
         return Trip.builder()
                 .vehicleId(firstPoint.getVehicleId())

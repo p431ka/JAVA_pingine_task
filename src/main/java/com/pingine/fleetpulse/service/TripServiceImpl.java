@@ -13,12 +13,13 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TripServiceImpl implements TripService {
 
-    private static final int RECENT_POINTS_LIMIT = 1000;
+    private final int RECENT_POINTS_LIMIT = 1000;
 
     private final TelemetryRepository telemetryRepository;
     private final TripDetector tripDetector;
@@ -43,10 +44,10 @@ public class TripServiceImpl implements TripService {
         return toResponse(vehicle, lastCompletedTrip);
     }
 
-    private static TripResponse toResponse(VehicleResponse vehicle, Trip trip) {
+    private TripResponse toResponse(VehicleResponse vehicle, Trip trip) {
         List<TripResponse.PointDto> points = trip.getPoints().stream()
-                .map(TripServiceImpl::toPointDto)
-                .toList();
+                .map(this::toPointDto)
+                .collect(Collectors.toList());
 
         return TripResponse.builder()
                 .vehicle(vehicle)
@@ -59,7 +60,7 @@ public class TripServiceImpl implements TripService {
                 .build();
     }
 
-    private static TripResponse.PointDto toPointDto(Trip.TripPoint point) {
+    private TripResponse.PointDto toPointDto(Trip.TripPoint point) {
         return TripResponse.PointDto.builder()
                 .ts(point.getTs())
                 .lat(point.getLat())
